@@ -1,0 +1,23 @@
+# vars.yml 
+---
+
+# PVE Template Provisioning Variables
+template_name:  2019DC-tpl
+pve_storage_id: vm-store
+vm_cores: 2
+vm_sockets: 2
+vm_memory_mb: 2048
+vm_os_type: win10
+# vm_os_type must be valid value per https://pve.proxmox.com/wiki/Qemu/KVM_Virtual_Machines
+drive_size_gb: 40
+start_at_boot: no
+os_iso_location: local:iso/17763.379.190312-0539.rs5_release_svc_refresh_SERVER_EVAL_x64FRE_en-us.iso
+
+# Unattend.xml template variables:
+deploy_image: 'Windows Server 2019 SERVERDATACENTER'
+# Applicable 2019 options for deploy_image: 
+# Windows Server 2019 SERVERDATACENTER, Windows Server 2019 SERVERDATACENTERCORE,
+# Windows Server 2019 SERVERSTANDARD, Windows Server 2019 SERVERSTANDARDCORE
+vm_admin_pass: AnsibleReady!
+vm_time_zone: 'Eastern Standard Time'
+org_name: 'Layer8Sys'
