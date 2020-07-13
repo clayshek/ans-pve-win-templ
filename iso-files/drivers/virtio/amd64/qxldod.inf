@@ -1,0 +1,94 @@
+; Copyright 2013-2016 Red Hat, Inc.
+;
+; Licensed under the Apache License, Version 2.0 (the "License");
+; you may not use this file except in compliance with the License.
+;
+; You may obtain a copy of the License at
+; http://www.apache.org/licenses/LICENSE-2.0
+
+[Version]
+Signature="$Windows NT$"
+Class=Display
+ClassGUID={4d36e968-e325-11ce-bfc1-08002be10318}
+Provider=%RHEL%
+DriverVer=04/11/2019,10.0.0.19000
+CatalogFile=qxldod.cat
+
+;
+; Source file information
+;
+[SourceDisksNames]
+1 = %DiskId1%,,,""
+
+[SourceDisksFiles]
+qxldod.sys = 1,,
+
+[ControlFlags]
+;ExcludeFromSelect = *
+
+[DestinationDirs]
+DefaultDestDir = 10
+QxlDod_Files_Driver = 12
+
+;
+; Driver information
+;
+
+[Manufacturer]
+%RHEL%=RHEL,NTamd64.6.2
+
+[RHEL.NTamd64.6.2]
+%RHELQxl.DeviceDesc% = QxlDod_Inst, PCI\VEN_1B36&DEV_0100&SUBSYS_11001AF4
+
+[QxlDod_Files_Driver]
+qxldod.sys,,,2
+
+[QxlDod_Inst]
+Include=msdv.inf
+FeatureScore=F9
+CopyFiles=QxlDod_Files_Driver
+AddReg=QxlDod_DeviceSettings
+
+[QxlDod_Inst.Services]
+AddService = QxlDod,0x00000002,QxlDod_Service_Inst, QxlDod_EventLog_Inst
+
+[QxlDod_Service_Inst]
+ServiceType = %SERVICE_KERNEL_DRIVER%
+StartType = %SERVICE_DEMAND_START%
+ErrorControl = %SERVICE_ERROR_IGNORE%
+ServiceBinary = %12%\qxldod.sys
+
+[QxlDod_EventLog_Inst]
+AddReg = QxlDod_EventLog_Inst.AddReg
+
+[QxlDod_EventLog_Inst.AddReg]
+HKR,,EventMessageFile,%REG_EXPAND_SZ%,"%%SystemRoot%%\System32\IoLogMsg.dll"
+HKR,,TypesSupported,%REG_DWORD%,7
+
+[QxlDod_DeviceSettings]
+HKR,, VgaCompatible,               %REG_DWORD%, 0
+
+[Strings]
+
+;  *******Localizable Strings*******
+diskId1 = "Red Hat QXL controller Installation Disk"
+RHELQxl.DeviceDesc = "Red Hat QXL controller"
+RHEL = "Red Hat, Inc."
+
+;  *******Non Localizable Strings*******
+SERVICE_BOOT_START = 0x0
+SERVICE_SYSTEM_START = 0x1
+SERVICE_AUTO_START = 0x2
+SERVICE_DEMAND_START = 0x3
+SERVICE_DISABLED = 0x4
+
+SERVICE_KERNEL_DRIVER = 0x1
+SERVICE_ERROR_IGNORE = 0x0
+SERVICE_ERROR_NORMAL = 0x1
+SERVICE_ERROR_SEVERE = 0x2
+SERVICE_ERROR_CRITICAL = 0x3
+
+REG_MULTI_SZ   = 0x00010000
+REG_EXPAND_SZ = 0x00020000
+REG_DWORD = 0x00010001
+
