@@ -9,7 +9,7 @@ vm_sockets: 2
 vm_memory_mb: 2048
 vm_os_type: win10
 # vm_os_type must be valid value per https://pve.proxmox.com/wiki/Qemu/KVM_Virtual_Machines
-drive_size_gb: 40
+drive_size_gb: 50
 start_at_boot: no
 os_iso_location: local:iso/17763.379.190312-0539.rs5_release_svc_refresh_SERVER_EVAL_x64FRE_en-us.iso
 
