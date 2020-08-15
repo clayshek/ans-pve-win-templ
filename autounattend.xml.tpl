@@ -124,36 +124,43 @@
                     <CommandLine>%SystemRoot%\System32\reg.exe ADD HKLM\SYSTEM\CurrentControlSet\Control\Network\NewNetworkWindowOff /f</CommandLine>
                     <Order>1</Order>
                     <Description>Disable Network Discovery Prompt</Description>
-                </SynchronousCommand>              
+                </SynchronousCommand>
+{% if agent is match("enabled=1") %}
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>e:\drivers\virtio\amd64\qemu-ga-x86_64.msi /quiet</CommandLine>
+                    <Order>2</Order>
+                    <Description>Install qemu-guest-agent</Description>
+                </SynchronousCommand>
+{% endif %}
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>powershell -File e:\scripts\AnsiblePrep.ps1</CommandLine>
                     <Description>Configure Ansible Prep and WinRM</Description>
-                    <Order>2</Order>
+                    <Order>3</Order>
                 </SynchronousCommand>   
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>powershell -File e:\scripts\win-updates-pass1.ps1</CommandLine>
                     <Description>Install Get-WindowsUpdate module and Windows Updates Pass 1</Description>
-                    <Order>3</Order>
+                    <Order>4</Order>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>powershell Start-Sleep -Seconds 20</CommandLine>
                     <Description>Insert a pause to prevent update pass 2 from starting just before reboot</Description>
-                    <Order>4</Order>
+                    <Order>5</Order>
                 </SynchronousCommand>                    
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>powershell -File e:\scripts\win-updates-pass2.ps1</CommandLine>
                     <Description>Install Windows Updates Pass 2</Description>
-                    <Order>5</Order>
+                    <Order>6</Order>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>powershell Start-Sleep -Seconds 25</CommandLine>
                     <Description>Insert a pause to prevent possible reboot during sysprep</Description>
-                    <Order>6</Order>
+                    <Order>7</Order>
                 </SynchronousCommand>       
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>powershell Start-Sleep -Seconds 30</CommandLine>
                     <Description>One more pause to prevent an early sysprep start</Description>
-                    <Order>7</Order>
+                    <Order>8</Order>
                 </SynchronousCommand>                                                                              
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>c:\windows\system32\sysprep\sysprep /generalize /oobe /shutdown</CommandLine>
