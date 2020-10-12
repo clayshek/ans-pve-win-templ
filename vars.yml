@@ -12,6 +12,10 @@ vm_os_type: win10
 drive_size_gb: 50
 start_at_boot: no
 os_iso_location: local:iso/17763.737.190906-2324.rs5_release_svc_refresh_SERVER_EVAL_x64FRE_en-us_1.iso
+format: qcow2
+# qcow2 or raw if on lvm
+agent: enabled=0
+# Enable with: 'enabled=1,fstrim_cloned_disks=1,type=virtio'
 
 # Unattend.xml template variables:
 deploy_image: 'Windows Server 2019 SERVERDATACENTER'
