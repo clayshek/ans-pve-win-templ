@@ -43,7 +43,7 @@
 
     # Create VM
     - name: Create VM
-      command: "qm create {{next_vmid.stdout}} --name {{template_name}} --sockets {{vm_sockets}} --cores {{vm_cores}} --memory {{vm_memory_mb}} --ide2 file={{os_iso_location}},media=cdrom --ide3 file=local:iso/{{template_name}}Provision.iso,media=cdrom --net0 model=virtio,bridge=vmbr0,firewall=1 --scsihw virtio-scsi-pci --scsi0 {{pve_storage_id}}:{{drive_size_gb}},format={{format}} --ostype {{vm_os_type}} --agent {{agent}}"
+      command: "qm create {{next_vmid.stdout}} --name {{template_name}} --sockets {{vm_sockets}} --cores {{vm_cores}} --memory {{vm_memory_mb}} --ide2 file={{os_iso_location}},media=cdrom --ide3 file=local:iso/{{template_name}}Provision.iso,media=cdrom --net0 model=virtio,bridge=vmbr0,firewall=1 --serial0 socket --scsihw virtio-scsi-pci --scsi0 {{pve_storage_id}}:{{drive_size_gb}},format={{format}} --ostype {{vm_os_type}} --agent {{agent}} --description {{template_name}}"
 
     # Start VM
     - name: Start VM
