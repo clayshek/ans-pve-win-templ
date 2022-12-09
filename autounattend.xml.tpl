@@ -17,7 +17,7 @@
                     <Path>e:\drivers\virtio\amd64</Path>
                 </PathAndCredentials>
             </DriverPaths>
-        </component>           
+        </component>
         <component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <DiskConfiguration>
                 <Disk wcm:action="add">
@@ -93,7 +93,7 @@
         <component name="Microsoft-Windows-TerminalServices-RDP-WinStationExtensions" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <SecurityLayer>1</SecurityLayer>
             <UserAuthentication>0</UserAuthentication>
-        </component>        
+        </component>
         <component name="Microsoft-Windows-ServerManager-SvrMgrNc" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <DoNotOpenServerManagerAtLogon>true</DoNotOpenServerManagerAtLogon>
         </component>
@@ -106,7 +106,7 @@
         </component>
         <component name="Microsoft-Windows-Security-SPP-UX" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <SkipAutoActivation>true</SkipAutoActivation>
-        </component>                  
+        </component>
     </settings>
     <settings pass="oobeSystem">
         <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -118,55 +118,65 @@
                 </Password>
                 <Enabled>true</Enabled>
                 <LogonCount>3</LogonCount>
-            </AutoLogon>            
+            </AutoLogon>
             <FirstLogonCommands>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>%SystemRoot%\System32\reg.exe ADD HKLM\SYSTEM\CurrentControlSet\Control\Network\NewNetworkWindowOff /f</CommandLine>
                     <Order>1</Order>
                     <Description>Disable Network Discovery Prompt</Description>
                 </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>%SystemRoot%\System32\bcdedit /ems {current} on</CommandLine>
+                    <Order>2</Order>
+                    <Description>Enable EMS Messages</Description>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>%SystemRoot%\System32\bcdedit /emssettings EMSPORT:1 EMSBAUDRATE:115200</CommandLine>
+                    <Order>3</Order>
+                    <Description>Enable EMS Messages</Description>
+                </SynchronousCommand>
 {% if agent is match("enabled=1") %}
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>e:\drivers\virtio\amd64\qemu-ga-x86_64.msi /quiet</CommandLine>
-                    <Order>2</Order>
+                    <Order>4</Order>
                     <Description>Install qemu-guest-agent</Description>
                 </SynchronousCommand>
 {% endif %}
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>powershell -File e:\scripts\AnsiblePrep.ps1</CommandLine>
                     <Description>Configure Ansible Prep and WinRM</Description>
-                    <Order>3</Order>
-                </SynchronousCommand>   
+                    <Order>5</Order>
+                </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>powershell -File e:\scripts\win-updates-pass1.ps1</CommandLine>
                     <Description>Install Get-WindowsUpdate module and Windows Updates Pass 1</Description>
-                    <Order>4</Order>
+                    <Order>6</Order>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>powershell Start-Sleep -Seconds 20</CommandLine>
                     <Description>Insert a pause to prevent update pass 2 from starting just before reboot</Description>
-                    <Order>5</Order>
-                </SynchronousCommand>                    
+                    <Order>7</Order>
+                </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>powershell -File e:\scripts\win-updates-pass2.ps1</CommandLine>
                     <Description>Install Windows Updates Pass 2</Description>
-                    <Order>6</Order>
+                    <Order>8</Order>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>powershell Start-Sleep -Seconds 25</CommandLine>
                     <Description>Insert a pause to prevent possible reboot during sysprep</Description>
-                    <Order>7</Order>
-                </SynchronousCommand>       
+                    <Order>9</Order>
+                </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>powershell Start-Sleep -Seconds 30</CommandLine>
                     <Description>One more pause to prevent an early sysprep start</Description>
-                    <Order>8</Order>
-                </SynchronousCommand>                                                                              
+                    <Order>10</Order>
+                </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>c:\windows\system32\sysprep\sysprep /generalize /oobe /shutdown</CommandLine>
                     <Description>Sysprep</Description>
-                    <Order>10</Order>
-                </SynchronousCommand>                                          
+                    <Order>11</Order>
+                </SynchronousCommand>
             </FirstLogonCommands>
             <OOBE>
                 <HideEULAPage>true</HideEULAPage>
